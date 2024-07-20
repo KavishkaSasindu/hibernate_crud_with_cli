@@ -61,7 +61,27 @@ public class AppInitializer {
                     userEntityList.stream().forEach(userEntity -> {
                         System.out.println(userEntity.toString());
                     });
+                    break;
+                case "4":
+                    System.out.print("Enter user id to update user :");
+                    int updateId = scanner.nextInt();
+                    scanner.nextLine();
+                    System.out.println("Enter new name :");
+                    String newName = scanner.nextLine();
+                    System.out.println("Enter new email :");
+                    String newEmail = scanner.nextLine();
+                    System.out.println("Enter new job :");
+                    String newJob = scanner.nextLine();
+                    System.out.println("Enter new salary :");
+                    double newSalary = scanner.nextDouble();
 
+                    UserEntity userUpdate = new UserEntity(updateId,newName,newEmail,newJob,newSalary);
+                    if(!updateUser(userUpdate,updateId)){
+                        System.out.println("User update failed");
+                    }else{
+                        System.out.println("User updated successfully");
+                    }
+                    break;
                 case "6":
                     System.out.println("Bye User");
                     return;
@@ -116,5 +136,26 @@ public class AppInitializer {
             System.out.println(e.getMessage());
         }
         return users;
+    }
+
+    private static boolean updateUser(UserEntity user,int id){
+        try{
+            Session session = HibernateUtils.getSession();
+            UserEntity user1 = session.find(UserEntity.class, id);
+            if(user1!=null){
+                user1.setId(id);
+                user1.setName(user.getName());
+                user1.setEmail(user.getEmail());
+                user1.setJob(user.getJob());
+                user1.setSalary(user.getSalary());
+                Transaction transaction = session.beginTransaction();
+                session.saveOrUpdate(user1);
+                transaction.commit();
+                return true;
+            }
+        }catch(Exception e){
+            System.out.println(e.getMessage());
+        }
+        return false;
     }
 }
