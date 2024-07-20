@@ -82,6 +82,16 @@ public class AppInitializer {
                         System.out.println("User updated successfully");
                     }
                     break;
+                case "5":
+                    System.out.print("Enter user id to delete user :");
+                    int deleteId = scanner.nextInt();
+                    scanner.nextLine();
+                    if(deleteCustomer(deleteId)){
+                        System.out.println("User deleted successfully");
+                    }else{
+                        System.out.println("User not deleted");
+                    };
+                    break;
                 case "6":
                     System.out.println("Bye User");
                     return;
@@ -156,6 +166,25 @@ public class AppInitializer {
         }catch(Exception e){
             System.out.println(e.getMessage());
         }
+        return false;
+    }
+
+//    delete user
+
+    private static boolean deleteCustomer(int id){
+        try{
+            Session session = HibernateUtils.getSession();
+            UserEntity user = session.find(UserEntity.class, id);
+            if(user!=null){
+                session.delete(user);
+                Transaction transaction = session.beginTransaction();
+                transaction.commit();
+                return true;
+            }
+        }catch(Exception e){
+            System.out.println(e.getMessage());
+        }
+
         return false;
     }
 }
