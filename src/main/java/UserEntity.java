@@ -62,4 +62,15 @@ public class UserEntity {
     public void setSalary(double salary) {
         this.salary = salary;
     }
+
+    @Override
+    public String toString() {
+        return "UserEntity{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", email='" + email + '\'' +
+                ", job='" + job + '\'' +
+                ", salary=" + salary +
+                '}';
+    }
 }
