@@ -14,7 +14,7 @@ public class AppInitializer {
             System.out.println("");
             System.out.println("Choose your choice:");
             System.out.println("1.Want to add User Go Here.");
-            System.out.println("2.find a user");
+            System.out.println("2.find a user with id");
             System.out.println("3.All users in the database");
             System.out.println("4.update user data in the database");
             System.out.println("5.delete user data in the database");
@@ -47,6 +47,12 @@ public class AppInitializer {
                         System.out.println("User not added");
                     };
                     break;
+                case "2":
+                    System.out.println("Enter user id to find user :");
+                    int userId = scanner.nextInt();
+                    UserEntity oneUser = findCustomer(userId);
+                    System.out.println(oneUser.toString());
+                    break;
                 case "6":
                     System.out.println("Bye User");
                     return;
@@ -70,5 +76,23 @@ public class AppInitializer {
           System.out.println(e.getMessage());
       }
         return true;
+    }
+
+//    find one customer
+    private static UserEntity findCustomer(int id){
+        UserEntity user = null;
+        try{
+            Session session = HibernateUtils.getSession();
+            user = session.find(UserEntity.class, id);
+            if(user!=null){
+                return user;
+            }else{
+                System.out.println("No user found that id");
+            }
+        }catch(Exception e){
+            System.out.println(e.getMessage());
+        }
+
+        return user;
     }
 }
