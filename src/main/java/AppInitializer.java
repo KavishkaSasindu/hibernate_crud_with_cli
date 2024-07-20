@@ -1,6 +1,8 @@
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.hibernate.query.Query;
 
+import java.util.List;
 import java.util.Scanner;
 
 public class AppInitializer {
@@ -53,6 +55,13 @@ public class AppInitializer {
                     UserEntity oneUser = findCustomer(userId);
                     System.out.println(oneUser.toString());
                     break;
+
+                case "3":
+                    List<UserEntity> userEntityList = findAllUser();
+                    userEntityList.stream().forEach(userEntity -> {
+                        System.out.println(userEntity.toString());
+                    });
+
                 case "6":
                     System.out.println("Bye User");
                     return;
@@ -94,5 +103,18 @@ public class AppInitializer {
         }
 
         return user;
+    }
+
+//    find all users
+    private static List<UserEntity> findAllUser(){
+        List<UserEntity> users = null;
+        try{
+            Session session = HibernateUtils.getSession();
+            Query query = session.createQuery("FROM UserEntity", UserEntity.class);
+            users = query.list();
+        }catch(Exception e){
+            System.out.println(e.getMessage());
+        }
+        return users;
     }
 }
